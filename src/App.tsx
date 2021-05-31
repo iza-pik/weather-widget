@@ -3,15 +3,17 @@ import styled from "styled-components";
 import { Form } from "./components/Form";
 import { API_KEY } from "./constants";
 import { CurrentWeather } from "./components/CurrentWeather";
+import Spinner from "./components/Spinner";
 
 const AppWrapper = styled.div`
+  position: relative;
   align-items: center;
   background-color: navy;
   color: white;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  min-height: 100vh;
+  min-height: 120vh;
   padding-top: 0;
   text-align: center;
 `;
@@ -119,7 +121,11 @@ function App() {
         return response.json();
       })
       .then((data) => {
-        setWeatherData({ ...weatherData, data, loading: false });
+        // setWeatherData({ ...weatherData, data, loading: false });
+        setTimeout(
+          () => setWeatherData({ ...weatherData, data, loading: false }),
+          3000
+        );
         setQuery({ ...query, queriedUnits: query.units });
         console.log(weatherData.data);
       })
@@ -148,7 +154,7 @@ function App() {
 
   return (
     <AppWrapper>
-      {weatherData.loading && "Loading..."}
+      <Spinner isOn={weatherData.loading} />
       <Form onChange={onChangeHandler} onSubmit={onSubmit} value={query} />
       {weatherData.data && (
         <CurrentWeather weatherData={weatherData.data} query={query} />

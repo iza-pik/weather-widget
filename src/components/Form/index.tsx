@@ -4,7 +4,8 @@ import { iQuery } from "../../App";
 import { InputField } from "../InputField";
 
 const FormWrapper = styled.form`
-  min-height: 50vh;
+  min-height: 50vmin;
+  min-width: 50vmin;
   background-color: white;
   border-radius: 2vmin;
   box-shadow: 0 0 5vmin 5vmin white;

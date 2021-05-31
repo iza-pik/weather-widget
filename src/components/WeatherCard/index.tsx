@@ -11,7 +11,8 @@ export const WeatherCardWrapper = styled.div`
   border-radius: 2vmin;
   color: black;
   font-weight: 900;
-  min-height: 50vh;
+  min-height: 50vmin;
+  min-width: 50vmin;
   ul {
     list-style-type: none;
   }
