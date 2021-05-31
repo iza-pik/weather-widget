@@ -1,12 +1,14 @@
-import { queryByTestId } from "@testing-library/dom";
 import React from "react";
 import styled from "styled-components";
 import { iQuery } from "../../App";
 import { InputField } from "../InputField";
 
 const FormWrapper = styled.form`
-  height: 50vh;
-  background-color: blue;
+  min-height: 50vh;
+  background-color: white;
+  border-radius: 2vmin;
+  box-shadow: 0 0 5vmin 5vmin white;
+  color: navy;
 `;
 
 export interface iForm {
@@ -21,9 +23,9 @@ export const Form: React.FC<iForm> = ({ onChange, onSubmit, value }) => (
       onChange={onChange}
       id="city"
       data-id="city"
-      label="City"
+      label="City: "
       type="text"
-      placeholder="City"
+      placeholder="Insert the city"
       value={value.city}
     />
     <InputField id="submit" type="submit" value="Submit" />

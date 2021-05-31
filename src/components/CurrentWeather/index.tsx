@@ -1,32 +1,13 @@
 import React from "react";
 import styled from "styled-components";
-import { iQuery } from "../../App";
+import { iWeatherCard, WeatherCard } from "../WeatherCard";
 
-const CurrentWeatherWrapper = styled.div`
-  min-height: 20vmax;
-  background-color: blue;
-  ul {
-    list-style-type: none;
-  }
-`;
+const CurrentWeatherWrapper = styled.div``;
 
-interface iCurrentWeather {
-  weatherData: any;
-  query: iQuery;
-}
-
-export const CurrentWeather: React.FC<iCurrentWeather> = ({
-  query,
-  weatherData,
-}) => {
+export const CurrentWeather: React.FC<iWeatherCard> = (props) => {
   return (
     <CurrentWeatherWrapper>
-      <ul>
-        <li>
-          {Math.floor(weatherData?.main?.temp)}
-          {query.units === "metric" ? " °C" : " °F"}
-        </li>
-      </ul>
+      <WeatherCard {...props} />
     </CurrentWeatherWrapper>
   );
 };

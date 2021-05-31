@@ -4,8 +4,22 @@ import styled from "styled-components";
 const InputFieldWrapper = styled.div`
   margin: 1vmin;
   padding: 1vmin;
-  border-radius: 2px;
-  background-color: paleturquoise;
+  input#text {
+    background-color: bisque;
+    border-radius: 1vmin;
+    font-size: 3vmin;
+    margin: 1vmin;
+  }
+  input#submit {
+    background-color: darksalmon;
+    border: solid bisque;
+    border-radius: 1vmin;
+    font-weight: bold;
+    font-size: 3vmin;
+  }
+  label {
+    padding: 3vmin; //???
+  }
 `;
 
 interface iInputField {
@@ -27,8 +41,8 @@ export const InputField: React.FC<iInputField> = ({
   return (
     <InputFieldWrapper>
       <label htmlFor={id}>
-        <input id={id} {...inputProps} />
         {label}
+        <input id={id} {...inputProps} />
       </label>
     </InputFieldWrapper>
   );
