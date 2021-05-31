@@ -25,7 +25,7 @@ export const Form: React.FC<iForm> = ({ onChange, onSubmit, value }) => (
       data-id="city"
       label="City: "
       type="text"
-      placeholder="Insert the city"
+      placeholder="Insert the city - empty for current location"
       value={value.city}
     />
     <InputField id="submit" type="submit" value="Submit" />

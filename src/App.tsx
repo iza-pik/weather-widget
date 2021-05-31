@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { Form } from "./components/Form";
 import { API_KEY } from "./constants";
@@ -9,6 +9,7 @@ const AppWrapper = styled.div`
   background-color: navy;
   color: white;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   min-height: 100vh;
   padding-top: 0;
@@ -91,14 +92,26 @@ function App() {
     loading: false,
     data: null,
   });
-  // useEffect(() => {}, []);
-  // console.log(Geolocation.getCurrentPosition();
-  const onSubmit = (event: React.FormEvent<HTMLInputElement>) => {
-    event.preventDefault();
-    setWeatherData({ ...weatherData, loading: true });
-    fetch(
-      `https://api.openweathermap.org/data/2.5/weather?q=${query.city}&appid=${API_KEY}&units=${query.units}`
-    )
+  const fetchLocalWeather = (): void => {
+    navigator.geolocation?.getCurrentPosition(
+      ({ coords }: any) => {
+        fetchWeather(
+          `https://api.openweathermap.org/data/2.5/weather?lat=${coords.latitude}&lon=${coords.longitude}&appid=${API_KEY}&units=${query.units}`
+        );
+      },
+      () =>
+        setWeatherData({
+          ...weatherData,
+          loading: false,
+          error: "Unable to get user location. Please search manually.",
+        })
+    );
+  };
+
+  useEffect(fetchLocalWeather, []);
+
+  const fetchWeather = (queryString: string): void => {
+    fetch(queryString)
       .then((response) => {
         if (!response.ok) {
           throw new Error("Unable to fetch data");
@@ -113,6 +126,18 @@ function App() {
       .catch((error) => {
         setWeatherData({ ...weatherData, error, loading: false });
       });
+  };
+
+  const onSubmit = (event: React.FormEvent<HTMLInputElement>) => {
+    event.preventDefault();
+    setWeatherData({ ...weatherData, loading: true });
+    if (query.city) {
+      fetchWeather(
+        `https://api.openweathermap.org/data/2.5/weather?q=${query.city}&appid=${API_KEY}&units=${query.units}`
+      );
+    } else {
+      fetchLocalWeather();
+    }
   };
 
   const onChangeHandler = (

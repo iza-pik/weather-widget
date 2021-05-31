@@ -8,10 +8,14 @@ export const WeatherCardWrapper = styled.div`
   background-image: url(${clouds});
   background-size: cover;
   background-position: bottom;
+  border-radius: 2vmin;
+  color: black;
+  font-weight: 900;
   min-height: 50vh;
   ul {
     list-style-type: none;
   }
+  text-shadow: 0 0 2vmin white;
   transition: 0.4s ease-out;
 `;
 
@@ -23,6 +27,7 @@ export interface iWeatherCard {
 export const WeatherCard: React.FC<iWeatherCard> = ({ query, weatherData }) => {
   return (
     <WeatherCardWrapper>
+      <h2>Weather in {weatherData.name || "current location"}</h2>
       <ul>
         <li>
           {Math.floor(weatherData?.main?.temp)}
