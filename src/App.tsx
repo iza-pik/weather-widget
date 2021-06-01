@@ -8,10 +8,11 @@ import Spinner from "./components/Spinner";
 const AppWrapper = styled.div`
   position: relative;
   align-items: center;
-  background-color: navy;
+  background: linear-gradient(navy 40%, lightblue);
   color: white;
   display: flex;
   flex-direction: column;
+  font-family: Helvetica, sans-serif;
   justify-content: center;
   min-height: 120vh;
   padding-top: 0;
@@ -53,7 +54,7 @@ export interface iMain {
 export interface iSys {
   type: number;
   id: number;
-  message: number;
+  message?: number;
   country: string;
   sunrise: number;
   sunset: number;
@@ -110,6 +111,7 @@ function App() {
     );
   };
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(fetchLocalWeather, []);
 
   const fetchWeather = (queryString: string): void => {
@@ -121,13 +123,8 @@ function App() {
         return response.json();
       })
       .then((data) => {
-        // setWeatherData({ ...weatherData, data, loading: false });
-        setTimeout(
-          () => setWeatherData({ ...weatherData, data, loading: false }),
-          3000
-        );
+        setWeatherData({ ...weatherData, data, loading: false });
         setQuery({ ...query, queriedUnits: query.units });
-        console.log(weatherData.data);
       })
       .catch((error) => {
         setWeatherData({ ...weatherData, error, loading: false });

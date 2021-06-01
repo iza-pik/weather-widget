@@ -4,12 +4,11 @@ import { iQuery } from "../../App";
 import { InputField } from "../InputField";
 
 const FormWrapper = styled.form`
-  min-height: 50vmin;
-  min-width: 50vmin;
-  background-color: white;
-  border-radius: 2vmin;
-  box-shadow: 0 0 5vmin 5vmin white;
-  color: navy;
+  min-height: 30vmin;
+  min-width: 75vw;
+  background-color: navy;
+  border-radius: 2vmin 2vmin 0 0;
+  color: bisque;
 `;
 
 export interface iForm {
@@ -26,7 +25,7 @@ export const Form: React.FC<iForm> = ({ onChange, onSubmit, value }) => (
       data-id="city"
       label="City: "
       type="text"
-      placeholder="Insert the city - empty for current location"
+      placeholder="Insert the city"
       value={value.city}
     />
     <InputField id="submit" type="submit" value="Submit" />
