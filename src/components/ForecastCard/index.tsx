@@ -4,7 +4,7 @@ import { iQuery, iData } from "../../App";
 import { getTime } from "../../utilities/getTime";
 import clouds from "../../assets/clouds.jpg";
 
-export const WeatherCardWrapper = styled.div`
+export const ForecastCardWrapper = styled.div`
   background-image: url(${clouds});
   background-size: cover;
   background-position: bottom;
@@ -53,7 +53,7 @@ export interface iWeatherCard {
 
 export const WeatherCard: React.FC<iWeatherCard> = ({ query, weatherData }) => {
   return (
-    <WeatherCardWrapper>
+    <ForecastCardWrapper>
       <h2 className="city">{weatherData?.name || "current location"}</h2>
       <div className="weather-data-box">
         <ul>
@@ -80,6 +80,6 @@ export const WeatherCard: React.FC<iWeatherCard> = ({ query, weatherData }) => {
           <li>{`Sunset: ${getTime(weatherData?.sys?.sunset)}`}</li>
         </ul>
       </div>
-    </WeatherCardWrapper>
+    </ForecastCardWrapper>
   );
 };

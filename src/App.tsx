@@ -4,8 +4,10 @@ import { Form } from "./components/Form";
 import { API_KEY } from "./constants";
 import { CurrentWeather } from "./components/CurrentWeather";
 import Spinner from "./components/Spinner";
+import { Forecast } from "./components/Forecast";
 
 const AppWrapper = styled.div`
+  display: flex;
   position: relative;
   align-items: center;
   background: linear-gradient(navy 40%, lightblue);
@@ -14,7 +16,7 @@ const AppWrapper = styled.div`
   flex-direction: column;
   font-family: Helvetica, sans-serif;
   justify-content: center;
-  min-height: 120vh;
+  min-height: 100vh;
   padding-top: 0;
   text-align: center;
 `;
@@ -125,13 +127,14 @@ function App() {
       .then((data) => {
         setWeatherData({ ...weatherData, data, loading: false });
         setQuery({ ...query, queriedUnits: query.units });
+        console.log(weatherData); //data
       })
       .catch((error) => {
         setWeatherData({ ...weatherData, error, loading: false });
       });
   };
 
-  const onSubmit = (event: React.FormEvent<HTMLInputElement>) => {
+  const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setWeatherData({ ...weatherData, loading: true });
     if (query.city) {
@@ -152,9 +155,13 @@ function App() {
   return (
     <AppWrapper>
       <Spinner isOn={weatherData.loading} />
+      {/* <Spinner isOn={weatherData.loading} /> */}
       <Form onChange={onChangeHandler} onSubmit={onSubmit} value={query} />
       {weatherData.data && (
         <CurrentWeather weatherData={weatherData.data} query={query} />
+      )}
+      {weatherData.data && (
+        <Forecast weatherData={weatherData.data} query={query} />
       )}
     </AppWrapper>
   );
