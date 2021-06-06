@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { iQuery, iData } from "../../App";
+import { iCurrent, iQuery } from "../../App";
 import { getTime } from "../../utilities/getTime";
 import clouds from "../../assets/clouds.jpg";
 
@@ -10,7 +10,7 @@ export const WeatherCardWrapper = styled.div`
   background-position: bottom;
   border-radius: 2vmin;
   .city {
-    transition: 0.4s ease-out;
+    transition: all 0.4s ease-out;
   }
   color: black;
   font-size: 3vmin;
@@ -48,25 +48,25 @@ export const WeatherCardWrapper = styled.div`
 
 export interface iWeatherCard {
   query: iQuery;
-  weatherData: iData;
+  weatherData: iCurrent;
 }
 
 export const WeatherCard: React.FC<iWeatherCard> = ({ query, weatherData }) => {
   return (
     <WeatherCardWrapper>
-      <h2 className="city">{weatherData?.name || "current location"}</h2>
+      <h2 className="city">{query.city || "current location"}</h2>
       <div className="weather-data-box">
         <ul>
           <li
             className={
-              typeof weatherData?.main?.temp !== "undefined"
-                ? weatherData?.main?.temp > 15
+              typeof weatherData?.temp !== "undefined"
+                ? weatherData?.temp > 15
                   ? "temperature-warm"
                   : "temperature"
                 : "temperature"
             }
           >
-            {Math.floor(weatherData?.main?.temp)}
+            {Math.floor(weatherData?.temp)}
             {query.queriedUnits === "metric" ? " °C" : " °F"}
           </li>
           <img
@@ -74,10 +74,10 @@ export const WeatherCard: React.FC<iWeatherCard> = ({ query, weatherData }) => {
             alt={`${weatherData?.weather[0]?.description} in ${query.city}`}
             className="icon"
           />
-          <li>{`Pressure: ${weatherData?.main?.pressure} hPa`}</li>
-          <li>{`Humidity: ${weatherData?.main?.humidity}%`}</li>
-          <li>{`Sunrise: ${getTime(weatherData?.sys?.sunrise)}`}</li>
-          <li>{`Sunset: ${getTime(weatherData?.sys?.sunset)}`}</li>
+          <li>{`Pressure: ${weatherData?.pressure} hPa`}</li>
+          <li>{`Humidity: ${weatherData?.humidity}%`}</li>
+          <li>{`Sunrise: ${getTime(weatherData?.sunrise)}`}</li>
+          <li>{`Sunset: ${getTime(weatherData?.sunset)}`}</li>
         </ul>
       </div>
     </WeatherCardWrapper>

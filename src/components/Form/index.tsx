@@ -78,6 +78,11 @@ export const Form: React.FC<iForm> = ({ onChange, onSubmit, value }) => {
             name="units"
             onChange={onChange}
           />
+          <InputField
+            id="submit"
+            type="submit"
+            value="Display weather forecast for the next 7 days"
+          />
         </FormWrapper>
       </Overlay>
     </>

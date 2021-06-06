@@ -21,63 +21,102 @@ const AppWrapper = styled.div`
   text-align: center;
 `;
 
-export interface iClouds {
-  all: number;
-}
+// export interface iClouds {
+//   all: number;
+// }
 
-export interface iCoord {
-  lon: number;
-  lat: number;
-}
+// export interface iCoord {
+//   lon: number;
+//   lat: number;
+// }
 
-export interface iData {
-  coord: iCoord;
-  weather: iWeather[];
-  base: string;
-  main: iMain;
-  visibility: number;
-  wind: iWind;
-  clouds: iClouds;
-  dt: number;
-  sys: iSys;
-  id: number;
-  name: string;
-  cod: number;
-}
+// export interface iData {
+//   coord: iCoord;
+//   weather: iWeather[];
+//   base: string;
+//   main: iMain;
+//   visibility: number;
+//   wind: iWind;
+//   clouds: iClouds;
+//   dt: number;
+//   sys: iSys;
+//   id: number;
+//   name: string;
+//   cod: number;
+// }
 
-export interface iMain {
+// export interface iMain {
+//   temp: number;
+//   pressure: number;
+//   humidity: number;
+//   temp_min: number;
+//   temp_max: number;
+// }
+
+// export interface iSys {
+//   type: number;
+//   id: number;
+//   message?: number;
+//   country: string;
+//   sunrise: number;
+//   sunset: number;
+// }
+
+// export interface iWeather {
+//   id: number;
+//   main: string;
+//   description: string;
+//   icon: string;
+// }
+// export interface iWeatherData {
+//   error: string;
+//   loading: boolean;
+//   data: iData | null;
+// }
+
+// export interface iWind {
+//   speed: number;
+//   deg: number;
+//   gust: number;
+// }
+
+// export interface iQuery {
+//   city: string;
+//   units: string;
+//   queriedUnits: string;
+// }
+
+export interface iCurrent {
+  sunrise: number;
+  sunset: number;
   temp: number;
   pressure: number;
   humidity: number;
-  temp_min: number;
-  temp_max: number;
+  weather: iWeather[];
 }
 
-export interface iSys {
-  type: number;
-  id: number;
-  message?: number;
-  country: string;
+export interface iDaily {
   sunrise: number;
   sunset: number;
+  temp: iTemp;
+  pressure: number;
+  humidity: number;
+  weather: iWeather[];
+}
+
+export interface iTemp {
+  day: number;
 }
 
 export interface iWeather {
-  id: number;
-  main: string;
   description: string;
   icon: string;
 }
+
 export interface iWeatherData {
   error: string;
   loading: boolean;
-  data: iData | null;
-}
-
-export interface iWind {
-  speed: number;
-  deg: number;
-  gust: number;
+  data: { current: iCurrent; daily: iDaily[] } | null;
 }
 
 export interface iQuery {
@@ -101,7 +140,7 @@ function App() {
     navigator.geolocation?.getCurrentPosition(
       ({ coords }: any) => {
         fetchWeather(
-          `https://api.openweathermap.org/data/2.5/weather?lat=${coords.latitude}&lon=${coords.longitude}&appid=${API_KEY}&units=${query.units}`
+          `https://api.openweathermap.org/data/2.5/onecall?lat=${coords.latitude}&lon=${coords.longitude}&appid=${API_KEY}&units=${query.units}`
         );
       },
       () =>
@@ -139,7 +178,7 @@ function App() {
     setWeatherData({ ...weatherData, loading: true });
     if (query.city) {
       fetchWeather(
-        `https://api.openweathermap.org/data/2.5/weather?q=${query.city}&appid=${API_KEY}&units=${query.units}`
+        `https://api.openweathermap.org/data/2.5/onecall?q=${query.city}&appid=${API_KEY}&units=${query.units}`
       );
     } else {
       fetchLocalWeather();
@@ -158,10 +197,10 @@ function App() {
       {/* <Spinner isOn={weatherData.loading} /> */}
       <Form onChange={onChangeHandler} onSubmit={onSubmit} value={query} />
       {weatherData.data && (
-        <CurrentWeather weatherData={weatherData.data} query={query} />
+        <CurrentWeather weatherData={weatherData.data.current} query={query} />
       )}
       {weatherData.data && (
-        <Forecast weatherData={weatherData.data} query={query} />
+        <Forecast weeklyForecastData={weatherData.data.daily} query={query} />
       )}
     </AppWrapper>
   );

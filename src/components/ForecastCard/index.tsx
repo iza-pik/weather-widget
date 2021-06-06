@@ -1,30 +1,24 @@
 import React from "react";
 import styled from "styled-components";
-import { iQuery, iData } from "../../App";
+import { iDaily, iQuery } from "../../App";
 import { getTime } from "../../utilities/getTime";
-import clouds from "../../assets/clouds.jpg";
 
 export const ForecastCardWrapper = styled.div`
-  background-image: url(${clouds});
-  background-size: cover;
+  background-color: bisque;
   background-position: bottom;
   border-radius: 2vmin;
-  .city {
-    transition: 0.4s ease-out;
-  }
   color: black;
   font-size: 3vmin;
   font-weight: 900;
   .icon {
-    min-width: 4vmax;
-    max-width: 10vmax;
+    min-width: 3vmax;
+    max-width: 8vmax;
   }
   .icon:hover {
     transform: scale(1.75);
   }
-  min-height: 65vmin;
-  min-width: 75vw;
-  padding-top: 2vmin;
+  min-height: 32.5vmin;
+  min-width: 10vw;
   ul {
     list-style-type: none;
     padding-left: 0;
@@ -32,12 +26,12 @@ export const ForecastCardWrapper = styled.div`
   text-shadow: 0 2px 2px white;
   .temperature {
     color: #0f0774;
-    font-size: 4vmin;
+    font-size: 3vmin;
     font-weight: bolder;
   }
   .temperature-warm {
     color: #550808;
-    font-size: 4vmin;
+    font-size: 3vmin;
     font-weight: bolder;
   }
   .weather-data-box {
@@ -47,37 +41,43 @@ export const ForecastCardWrapper = styled.div`
 `;
 
 export interface iWeatherCard {
+  forecastData: iDaily;
+  forecastDay: string;
   query: iQuery;
-  weatherData: iData;
 }
 
-export const WeatherCard: React.FC<iWeatherCard> = ({ query, weatherData }) => {
+export const ForecastCard: React.FC<iWeatherCard> = ({
+  forecastData,
+  forecastDay,
+  query,
+}) => {
   return (
     <ForecastCardWrapper>
-      <h2 className="city">{weatherData?.name || "current location"}</h2>
+      <h4>{forecastDay}</h4>
       <div className="weather-data-box">
         <ul>
           <li
             className={
-              typeof weatherData?.main?.temp !== "undefined"
-                ? weatherData?.main?.temp > 15
+              typeof forecastData?.temp !== "undefined"
+                ? forecastData?.temp.day > 15
                   ? "temperature-warm"
                   : "temperature"
                 : "temperature"
             }
           >
-            {Math.floor(weatherData?.main?.temp)}
+            {Math.floor(forecastData?.temp.day)}
             {query.queriedUnits === "metric" ? " °C" : " °F"}
           </li>
           <img
-            src={`http://openweathermap.org/img/w/${weatherData?.weather[0]?.icon}.png`}
-            alt={`${weatherData?.weather[0]?.description} in ${query.city}`}
+            src={`http://openweathermap.org/img/w/${forecastData?.weather[0]?.icon}.png`}
+            alt={`${forecastData?.weather[0]?.description} in ${query.city}`}
             className="icon"
           />
-          <li>{`Pressure: ${weatherData?.main?.pressure} hPa`}</li>
-          <li>{`Humidity: ${weatherData?.main?.humidity}%`}</li>
-          <li>{`Sunrise: ${getTime(weatherData?.sys?.sunrise)}`}</li>
-          <li>{`Sunset: ${getTime(weatherData?.sys?.sunset)}`}</li>
+          {/*           
+          <li>{`Pressure: ${forecastData?.pressure} hPa`}</li>
+          <li>{`Humidity: ${forecastData?.humidity}%`}</li>
+          <li>{`Sunrise: ${getTime(forecastData?.sunrise)}`}</li>
+          <li>{`Sunset: ${getTime(forecastData?.sunset)}`}</li> */}
         </ul>
       </div>
     </ForecastCardWrapper>
