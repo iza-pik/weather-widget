@@ -4,7 +4,7 @@ import { iQuery } from "../../App";
 import { InputField } from "../InputField";
 import Overlay from "../Overlay";
 
-const Button = styled.button`
+export const Button = styled.button`
   background-color: navy;
   border: none;
   &:hover {
@@ -77,11 +77,6 @@ export const Form: React.FC<iForm> = ({ onChange, onSubmit, value }) => {
             value="imperial"
             name="units"
             onChange={onChange}
-          />
-          <InputField
-            id="submit"
-            type="submit"
-            value="Display weather forecast for the next 7 days"
           />
         </FormWrapper>
       </Overlay>

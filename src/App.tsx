@@ -21,71 +21,6 @@ const AppWrapper = styled.div`
   text-align: center;
 `;
 
-// export interface iClouds {
-//   all: number;
-// }
-
-// export interface iCoord {
-//   lon: number;
-//   lat: number;
-// }
-
-// export interface iData {
-//   coord: iCoord;
-//   weather: iWeather[];
-//   base: string;
-//   main: iMain;
-//   visibility: number;
-//   wind: iWind;
-//   clouds: iClouds;
-//   dt: number;
-//   sys: iSys;
-//   id: number;
-//   name: string;
-//   cod: number;
-// }
-
-// export interface iMain {
-//   temp: number;
-//   pressure: number;
-//   humidity: number;
-//   temp_min: number;
-//   temp_max: number;
-// }
-
-// export interface iSys {
-//   type: number;
-//   id: number;
-//   message?: number;
-//   country: string;
-//   sunrise: number;
-//   sunset: number;
-// }
-
-// export interface iWeather {
-//   id: number;
-//   main: string;
-//   description: string;
-//   icon: string;
-// }
-// export interface iWeatherData {
-//   error: string;
-//   loading: boolean;
-//   data: iData | null;
-// }
-
-// export interface iWind {
-//   speed: number;
-//   deg: number;
-//   gust: number;
-// }
-
-// export interface iQuery {
-//   city: string;
-//   units: string;
-//   queriedUnits: string;
-// }
-
 export interface iCurrent {
   sunrise: number;
   sunset: number;
@@ -145,7 +80,7 @@ function App() {
       },
       () =>
         setWeatherData({
-          ...weatherData,
+          data: null,
           loading: false,
           error: "Unable to get user location. Please search manually.",
         })
@@ -156,6 +91,7 @@ function App() {
   useEffect(fetchLocalWeather, []);
 
   const fetchWeather = (queryString: string): void => {
+    console.log(queryString);
     fetch(queryString)
       .then((response) => {
         if (!response.ok) {
@@ -164,12 +100,15 @@ function App() {
         return response.json();
       })
       .then((data) => {
-        setWeatherData({ ...weatherData, data, loading: false });
+        setWeatherData({ ...weatherData, data, loading: false, error: "" });
         setQuery({ ...query, queriedUnits: query.units });
-        console.log(weatherData); //data
       })
-      .catch((error) => {
-        setWeatherData({ ...weatherData, error, loading: false });
+      .catch(() => {
+        setWeatherData({
+          data: null,
+          error: `Unable to fetch information for ${query.city}`,
+          loading: false,
+        });
       });
   };
 
@@ -177,9 +116,18 @@ function App() {
     event.preventDefault();
     setWeatherData({ ...weatherData, loading: true });
     if (query.city) {
-      fetchWeather(
-        `https://api.openweathermap.org/data/2.5/onecall?q=${query.city}&appid=${API_KEY}&units=${query.units}`
-      );
+      fetch(
+        `https://api.openweathermap.org/data/2.5/weather?q=${query.city}&appid=${API_KEY}&units=${query.units}`
+      )
+        .then((res) => {
+          if (!res.ok) throw new Error("Unable to fetch city location");
+          return res.json();
+        })
+        .then(({ coord }) => {
+          fetchWeather(
+            `https://api.openweathermap.org/data/2.5/onecall?lat=${coord.lat}&lon=${coord.lon}&appid=${API_KEY}&units=${query.units}`
+          );
+        });
     } else {
       fetchLocalWeather();
     }
@@ -194,7 +142,6 @@ function App() {
   return (
     <AppWrapper>
       <Spinner isOn={weatherData.loading} />
-      {/* <Spinner isOn={weatherData.loading} /> */}
       <Form onChange={onChangeHandler} onSubmit={onSubmit} value={query} />
       {weatherData.data && (
         <CurrentWeather weatherData={weatherData.data.current} query={query} />
@@ -202,6 +149,7 @@ function App() {
       {weatherData.data && (
         <Forecast weeklyForecastData={weatherData.data.daily} query={query} />
       )}
+      {weatherData.error && <h2>{weatherData.error}</h2>}
     </AppWrapper>
   );
 }

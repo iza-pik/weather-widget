@@ -11,6 +11,7 @@ const InputFieldWrapper = styled.div`
     border-radius: 1vmin;
     font-size: 3vmin;
     margin: 1vmin;
+    padding: 0.75vmin;
   }
   input#submit {
     background-color: goldenrod;

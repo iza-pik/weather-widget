@@ -1,15 +1,19 @@
 import React from "react";
 import styled from "styled-components";
 import { iDaily, iQuery } from "../../App";
-import { getTime } from "../../utilities/getTime";
 
 export const ForecastCardWrapper = styled.div`
   background-color: bisque;
-  background-position: bottom;
+  transition: background-color 0.3s linear;
   border-radius: 2vmin;
   color: black;
   font-size: 3vmin;
   font-weight: 900;
+  cursor: pointer;
+  &:hover {
+    background-color: goldenrod;
+    transition: background-color 0.1s linear;
+  }
   .icon {
     min-width: 3vmax;
     max-width: 8vmax;
@@ -17,7 +21,8 @@ export const ForecastCardWrapper = styled.div`
   .icon:hover {
     transform: scale(1.75);
   }
-  min-height: 32.5vmin;
+  margin-top: 2vmin;
+  min-height: 28vmin;
   min-width: 10vw;
   ul {
     list-style-type: none;
@@ -42,18 +47,24 @@ export const ForecastCardWrapper = styled.div`
 
 export interface iWeatherCard {
   forecastData: iDaily;
-  forecastDay: string;
+  forecastDay: { name: string; index: number };
+  onClick: any;
   query: iQuery;
 }
 
 export const ForecastCard: React.FC<iWeatherCard> = ({
   forecastData,
   forecastDay,
+  onClick,
   query,
 }) => {
   return (
-    <ForecastCardWrapper>
-      <h4>{forecastDay}</h4>
+    <ForecastCardWrapper
+      role="button"
+      data-day-index={forecastDay.index}
+      onClick={onClick}
+    >
+      <h4>{forecastDay.name}</h4>
       <div className="weather-data-box">
         <ul>
           <li
@@ -68,16 +79,13 @@ export const ForecastCard: React.FC<iWeatherCard> = ({
             {Math.floor(forecastData?.temp.day)}
             {query.queriedUnits === "metric" ? " °C" : " °F"}
           </li>
-          <img
-            src={`http://openweathermap.org/img/w/${forecastData?.weather[0]?.icon}.png`}
-            alt={`${forecastData?.weather[0]?.description} in ${query.city}`}
-            className="icon"
-          />
-          {/*           
-          <li>{`Pressure: ${forecastData?.pressure} hPa`}</li>
-          <li>{`Humidity: ${forecastData?.humidity}%`}</li>
-          <li>{`Sunrise: ${getTime(forecastData?.sunrise)}`}</li>
-          <li>{`Sunset: ${getTime(forecastData?.sunset)}`}</li> */}
+          <li>
+            <img
+              src={`http://openweathermap.org/img/w/${forecastData?.weather[0]?.icon}.png`}
+              alt={`${forecastData?.weather[0]?.description} in ${query.city}`}
+              className="icon"
+            />
+          </li>
         </ul>
       </div>
     </ForecastCardWrapper>

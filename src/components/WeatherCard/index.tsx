@@ -22,7 +22,7 @@ export const WeatherCardWrapper = styled.div`
   .icon:hover {
     transform: scale(1.75);
   }
-  min-height: 65vmin;
+  min-height: 50vmin;
   min-width: 75vw;
   padding-top: 2vmin;
   ul {
@@ -54,7 +54,7 @@ export interface iWeatherCard {
 export const WeatherCard: React.FC<iWeatherCard> = ({ query, weatherData }) => {
   return (
     <WeatherCardWrapper>
-      <h2 className="city">{query.city || "current location"}</h2>
+      <h2 className="city">{query.city || "Current location"}</h2>
       <div className="weather-data-box">
         <ul>
           <li
