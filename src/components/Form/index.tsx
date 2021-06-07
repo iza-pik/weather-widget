@@ -11,8 +11,8 @@ export const Button = styled.button`
     transform: scale(1.75);
   }
   font-size: 5vmin;
-  margin-right: 7vw;
-  margin-top: 3vh;
+  margin-right: 3vw;
+  margin-top: 5vh;
   min-height: 10vmin;
   min-width: 10vmin;
   position: fixed;

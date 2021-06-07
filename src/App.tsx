@@ -64,7 +64,7 @@ function App() {
   const [query, setQuery] = useState<iQuery>({
     city: "",
     units: "metric",
-    queriedUnits: "",
+    queriedUnits: "metric",
   });
   const [weatherData, setWeatherData] = useState<iWeatherData>({
     error: "",
@@ -74,9 +74,21 @@ function App() {
   const fetchLocalWeather = (): void => {
     navigator.geolocation?.getCurrentPosition(
       ({ coords }: any) => {
-        fetchWeather(
-          `https://api.openweathermap.org/data/2.5/onecall?lat=${coords.latitude}&lon=${coords.longitude}&appid=${API_KEY}&units=${query.units}`
-        );
+        fetch(
+          `https://api.openweathermap.org/data/2.5/weather?lat=${coords.latitude}&lon=${coords.longitude}&appid=${API_KEY}&units=${query.units}`
+        )
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error("Unable to fetch data");
+            }
+            return response.json();
+          })
+          .then((response) => {
+            fetchWeather(
+              `https://api.openweathermap.org/data/2.5/onecall?lat=${coords.latitude}&lon=${coords.longitude}&appid=${API_KEY}&units=${query.units}`
+            );
+            setQuery({ ...query, city: response.name });
+          });
       },
       () =>
         setWeatherData({
@@ -91,7 +103,6 @@ function App() {
   useEffect(fetchLocalWeather, []);
 
   const fetchWeather = (queryString: string): void => {
-    console.log(queryString);
     fetch(queryString)
       .then((response) => {
         if (!response.ok) {
@@ -101,7 +112,6 @@ function App() {
       })
       .then((data) => {
         setWeatherData({ ...weatherData, data, loading: false, error: "" });
-        setQuery({ ...query, queriedUnits: query.units });
       })
       .catch(() => {
         setWeatherData({

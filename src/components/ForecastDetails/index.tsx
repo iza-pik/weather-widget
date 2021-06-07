@@ -2,7 +2,6 @@ import React from "react";
 import { iDaily } from "../../App";
 import { getTime } from "../../utilities/getTime";
 import styled from "styled-components";
-import { ForecastCard } from "../../components/ForecastCard";
 
 export const ForecastDetailsWrapper = styled.div`
   background-color: bisque;
