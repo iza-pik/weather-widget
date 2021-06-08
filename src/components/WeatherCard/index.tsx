@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { iQuery, iData } from "../../App";
+import { iCurrent, iQuery } from "../../App";
 import { getTime } from "../../utilities/getTime";
 import clouds from "../../assets/clouds.jpg";
 
@@ -8,9 +8,9 @@ export const WeatherCardWrapper = styled.div`
   background-image: url(${clouds});
   background-size: cover;
   background-position: bottom;
-  border-radius: 0 0 2vmin 2vmin;
+  border-radius: 2vmin;
   .city {
-    transition: 0.4s ease-out;
+    transition: all 0.4s ease-out;
   }
   color: black;
   font-size: 3vmin;
@@ -22,7 +22,7 @@ export const WeatherCardWrapper = styled.div`
   .icon:hover {
     transform: scale(1.75);
   }
-  min-height: 65vmin;
+  min-height: 50vmin;
   min-width: 75vw;
   padding-top: 2vmin;
   ul {
@@ -48,36 +48,37 @@ export const WeatherCardWrapper = styled.div`
 
 export interface iWeatherCard {
   query: iQuery;
-  weatherData: iData;
+  weatherData: iCurrent;
 }
 
 export const WeatherCard: React.FC<iWeatherCard> = ({ query, weatherData }) => {
+  const isMetric = query.queriedUnits === "metric";
   return (
     <WeatherCardWrapper>
-      <h2 className="city">{weatherData.name || "current location"}</h2>
+      <h2 className="city">{query.city || "Current location"}</h2>
       <div className="weather-data-box">
         <ul>
           <li
             className={
-              typeof weatherData?.main?.temp !== "undefined"
-                ? weatherData?.main?.temp > 15
+              typeof weatherData?.temp !== "undefined"
+                ? weatherData?.temp > (isMetric ? 15 : 60)
                   ? "temperature-warm"
                   : "temperature"
                 : "temperature"
             }
           >
-            {Math.floor(weatherData?.main?.temp)}
-            {query.queriedUnits === "metric" ? " °C" : " °F"}
+            {Math.floor(weatherData?.temp)}
+            {isMetric ? " °C" : " °F"}
           </li>
           <img
             src={`http://openweathermap.org/img/w/${weatherData?.weather[0]?.icon}.png`}
             alt={`${weatherData?.weather[0]?.description} in ${query.city}`}
             className="icon"
           />
-          <li>{`Pressure: ${weatherData?.main?.pressure} hPa`}</li>
-          <li>{`Humidity: ${weatherData?.main?.humidity}%`}</li>
-          <li>{`Sunrise: ${getTime(weatherData?.sys?.sunrise)}`}</li>
-          <li>{`Sunset: ${getTime(weatherData?.sys?.sunset)}`}</li>
+          <li>{`Pressure: ${weatherData?.pressure} hPa`}</li>
+          <li>{`Humidity: ${weatherData?.humidity}%`}</li>
+          <li>{`Sunrise: ${getTime(weatherData?.sunrise)}`}</li>
+          <li>{`Sunset: ${getTime(weatherData?.sunset)}`}</li>
         </ul>
       </div>
     </WeatherCardWrapper>
