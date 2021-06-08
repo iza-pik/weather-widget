@@ -87,7 +87,11 @@ function App() {
             fetchWeather(
               `https://api.openweathermap.org/data/2.5/onecall?lat=${coords.latitude}&lon=${coords.longitude}&appid=${API_KEY}&units=${query.units}`
             );
-            setQuery({ ...query, city: response.name });
+            setQuery({
+              ...query,
+              city: response.name,
+              queriedUnits: query.units,
+            });
           });
       },
       () =>
@@ -134,6 +138,7 @@ function App() {
           return res.json();
         })
         .then(({ coord }) => {
+          setQuery({ ...query, queriedUnits: query.units });
           fetchWeather(
             `https://api.openweathermap.org/data/2.5/onecall?lat=${coord.lat}&lon=${coord.lon}&appid=${API_KEY}&units=${query.units}`
           );

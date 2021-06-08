@@ -60,7 +60,8 @@ export const WeatherCard: React.FC<iWeatherCard> = ({ query, weatherData }) => {
           <li
             className={
               typeof weatherData?.temp !== "undefined"
-                ? weatherData?.temp > 15
+                ? weatherData?.temp >
+                  (query.queriedUnits === "metric" ? 15 : 60)
                   ? "temperature-warm"
                   : "temperature"
                 : "temperature"
