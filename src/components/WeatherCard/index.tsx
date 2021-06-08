@@ -52,6 +52,7 @@ export interface iWeatherCard {
 }
 
 export const WeatherCard: React.FC<iWeatherCard> = ({ query, weatherData }) => {
+  const isMetric = query.queriedUnits === "metric";
   return (
     <WeatherCardWrapper>
       <h2 className="city">{query.city || "Current location"}</h2>
@@ -60,15 +61,14 @@ export const WeatherCard: React.FC<iWeatherCard> = ({ query, weatherData }) => {
           <li
             className={
               typeof weatherData?.temp !== "undefined"
-                ? weatherData?.temp >
-                  (query.queriedUnits === "metric" ? 15 : 60)
+                ? weatherData?.temp > (isMetric ? 15 : 60)
                   ? "temperature-warm"
                   : "temperature"
                 : "temperature"
             }
           >
             {Math.floor(weatherData?.temp)}
-            {query.queriedUnits === "metric" ? " °C" : " °F"}
+            {isMetric ? " °C" : " °F"}
           </li>
           <img
             src={`http://openweathermap.org/img/w/${weatherData?.weather[0]?.icon}.png`}

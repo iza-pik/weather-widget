@@ -58,6 +58,7 @@ export const ForecastCard: React.FC<iWeatherCard> = ({
   onClick,
   query,
 }) => {
+  const isMetric = query.queriedUnits === "metric";
   return (
     <ForecastCardWrapper
       role="button"
@@ -70,15 +71,14 @@ export const ForecastCard: React.FC<iWeatherCard> = ({
           <li
             className={
               typeof forecastData?.temp !== "undefined"
-                ? forecastData?.temp.day >
-                  (query.queriedUnits === "metric" ? 15 : 60)
+                ? forecastData?.temp.day > (isMetric ? 15 : 60)
                   ? "temperature-warm"
                   : "temperature"
                 : "temperature"
             }
           >
             {Math.floor(forecastData?.temp.day)}
-            {query.queriedUnits === "metric" ? " °C" : " °F"}
+            {isMetric ? " °C" : " °F"}
           </li>
           <li>
             <img
